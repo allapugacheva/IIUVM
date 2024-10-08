@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     setFixedSize(450,180);
 
     setWindowTitle("Battery Information");
-    setWindowIcon(QIcon("D:/IIUVM/Lab1 + Graphics/battery.png"));
 
     connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::onPushButtonClicked);
     connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::onPushButton2Clicked);
@@ -59,4 +58,3 @@ void MainWindow::onPushButton2Clicked()
     else if(reply == QMessageBox::No)
         SetSuspendState(TRUE, FALSE, FALSE);
 }
-

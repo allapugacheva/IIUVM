@@ -262,5 +262,3 @@ void BatteryInfo::findBatteryInformation()
         this->batteryFullLifeTime += QString::number(seconds);
     }
 }
-
-
