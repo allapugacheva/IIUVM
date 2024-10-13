@@ -24,5 +24,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    bool getPCIDevicesUsingIO(HANDLE& h);
+    bool getPCIDevicesUsingReadConfig(HANDLE& h);
+
+    PCI_DEVICES pciDevices;
 };
 #endif // MAINWINDOW_H

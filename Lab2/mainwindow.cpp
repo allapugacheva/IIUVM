@@ -21,17 +21,9 @@ MainWindow::MainWindow(QWidget *parent)
 
         CloseHandle(hDevice);
     } else {
-        PCI_DEVICES pciDevices;
 
-        DWORD returned;
-        BOOL success = DeviceIoControl(hDevice,
-                                       IOCTL_PCI_READ_CONFIG,
-                                       nullptr,
-                                       0,
-                                       &pciDevices,
-                                       sizeof(pciDevices),
-                                       &returned,
-                                       nullptr);
+        //bool success = getPCIDevicesUsingReadConfig(hDevice);
+        bool success = getPCIDevicesUsingIO(hDevice);
 
         if (success) {
 
@@ -63,4 +55,72 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+bool MainWindow::getPCIDevicesUsingIO(HANDLE& h)
+{
+    DWORD returned;
+    unsigned short vendorID, deviceID;
+    int count = 0;
+
+    WRITE_ADDR_DATA wad;
+    wad.addr = (unsigned long*)0xCF8;
+
+    READ_ADDR ra;
+    ra.addr = (unsigned long*)0xCFC;
+
+    READ_DATA rd;
+
+    for (int bus = 0; bus < 256; bus++) {
+        for (int device = 0; device < 32; device++) {
+            for (int function = 0; function < 8; function++) {
+
+                wad.data = 0x80000000 | (bus << 16) | (device << 11) | (function << 8) | (0x00);
+                if(!DeviceIoControl(h,
+                                    IOCTL_WRITE_DATA,
+                                    &wad,
+                                    sizeof(wad),
+                                    nullptr,
+                                    0,
+                                    &returned,
+                                    nullptr))
+                    return false;
+
+                if(!DeviceIoControl(h,
+                                    IOCTL_READ_DATA,
+                                    &ra,
+                                    sizeof(ra),
+                                    &rd,
+                                    sizeof(rd),
+                                    &returned,
+                                    nullptr))
+                    return false;
+
+                vendorID = rd.data & 0xFFFF;
+                deviceID = (rd.data >> 16) & 0xFFFF;
+
+                if (vendorID != 0xFFFF) {
+                    pciDevices.devices[count].deviceId = deviceID;
+                    pciDevices.devices[count].vendorId = vendorID;
+                    count++;
+                }
+            }
+        }
+    }
+
+    pciDevices.count = count;
+    return true;
+}
+
+bool MainWindow::getPCIDevicesUsingReadConfig(HANDLE& h)
+{
+    DWORD returned;
+    return DeviceIoControl(h,
+                           IOCTL_PCI_READ_CONFIG,
+                           nullptr,
+                           0,
+                           &pciDevices,
+                           sizeof(pciDevices),
+                           &returned,
+                           nullptr);
 }

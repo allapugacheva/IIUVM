@@ -1,6 +1,8 @@
 #pragma once
 
 #define IOCTL_PCI_READ_CONFIG CTL_CODE(FILE_DEVICE_UNKNOWN, 0x800, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_READ_DATA CTL_CODE(FILE_DEVICE_UNKNOWN, 0x801, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_WRITE_DATA CTL_CODE(FILE_DEVICE_UNKNOWN, 0x802, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
  
 typedef struct _PCI_DEVICE_INFO {
     unsigned short vendorId;
@@ -11,3 +13,16 @@ typedef struct _PCI_DEVICES {
     PCI_DEVICE_INFO devices[256];
     unsigned int count;
 } PCI_DEVICES;
+
+typedef struct _WRITE_ADDR_DATA {
+    PULONG addr;
+    ULONG data;
+} WRITE_ADDR_DATA;
+
+typedef struct _READ_ADDR {
+    PULONG addr;
+} READ_ADDR;
+
+typedef struct _READ_DATA {
+    ULONG data;
+} READ_DATA;
