@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <Windows.h>
-#include "PCI_DRIVER_HEADER.h"
+#include "IO_DRIVER_HEADER.h"
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QStandardItem>
@@ -13,6 +13,16 @@ namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
+
+typedef struct _PCI_DEVICE_INFO {
+    unsigned short vendorId;
+    unsigned short deviceId;
+} PCI_DEVICE_INFO;
+
+typedef struct _PCI_DEVICES {
+    PCI_DEVICE_INFO devices[256];
+    unsigned int count;
+} PCI_DEVICES;
 
 class MainWindow : public QMainWindow
 {
@@ -25,7 +35,6 @@ public:
 private:
     Ui::MainWindow *ui;
     bool getPCIDevicesUsingIO(HANDLE& h);
-    bool getPCIDevicesUsingReadConfig(HANDLE& h);
 
     PCI_DEVICES pciDevices;
 };

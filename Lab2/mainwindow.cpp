@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    HANDLE hDevice = CreateFile(L"\\\\.\\PCIDriver",
+    HANDLE hDevice = CreateFile(L"\\\\.\\IODriver",
                                 GENERIC_READ | GENERIC_WRITE,
                                 0,
                                 nullptr,
@@ -22,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
         CloseHandle(hDevice);
     } else {
 
-        //bool success = getPCIDevicesUsingReadConfig(hDevice);
         bool success = getPCIDevicesUsingIO(hDevice);
 
         if (success) {
@@ -63,13 +62,13 @@ bool MainWindow::getPCIDevicesUsingIO(HANDLE& h)
     unsigned short vendorID, deviceID;
     int count = 0;
 
-    WRITE_ADDR_DATA wad;
+    WRITE_ULONG wad;
     wad.addr = (unsigned long*)0xCF8;
 
-    READ_ADDR ra;
+    READ_ULONG_ADDR ra;
     ra.addr = (unsigned long*)0xCFC;
 
-    READ_DATA rd;
+    READ_ULONG_DATA rd;
 
     for (int bus = 0; bus < 256; bus++) {
         for (int device = 0; device < 32; device++) {
@@ -77,7 +76,7 @@ bool MainWindow::getPCIDevicesUsingIO(HANDLE& h)
 
                 wad.data = 0x80000000 | (bus << 16) | (device << 11) | (function << 8) | (0x00);
                 if(!DeviceIoControl(h,
-                                    IOCTL_WRITE_DATA,
+                                    IOCTL_WRITE_ULONG,
                                     &wad,
                                     sizeof(wad),
                                     nullptr,
@@ -87,7 +86,7 @@ bool MainWindow::getPCIDevicesUsingIO(HANDLE& h)
                     return false;
 
                 if(!DeviceIoControl(h,
-                                    IOCTL_READ_DATA,
+                                    IOCTL_READ_ULONG,
                                     &ra,
                                     sizeof(ra),
                                     &rd,
@@ -110,17 +109,4 @@ bool MainWindow::getPCIDevicesUsingIO(HANDLE& h)
 
     pciDevices.count = count;
     return true;
-}
-
-bool MainWindow::getPCIDevicesUsingReadConfig(HANDLE& h)
-{
-    DWORD returned;
-    return DeviceIoControl(h,
-                           IOCTL_PCI_READ_CONFIG,
-                           nullptr,
-                           0,
-                           &pciDevices,
-                           sizeof(pciDevices),
-                           &returned,
-                           nullptr);
 }
