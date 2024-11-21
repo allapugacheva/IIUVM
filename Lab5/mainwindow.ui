@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>USBView</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QListView" name="itemsList">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>30</y>
+      <width>400</width>
+      <height>230</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::Box</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Plain</enum>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="extractButton">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>465</y>
+      <width>200</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Извлечь</string>
+    </property>
+   </widget>
+   <widget class="QListView" name="eventsList">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>290</y>
+      <width>400</width>
+      <height>170</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::Panel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Plain</enum>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="usb_label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>400</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>USB устройства</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="event_label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>260</y>
+      <width>400</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>События извлечения</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
